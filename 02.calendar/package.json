@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "minimist": "^1.2.6"
+    "minimist": "^1.2.6",
+    "sprintf-js": "^1.1.2"
   },
   "devDependencies": {
     "eslint": "^8.14.0",
