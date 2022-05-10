@@ -8,13 +8,13 @@ const firstDay = getJPDate(year, month, 1)
 const lastDay = getJPDate(year, month + 1, 0)
 const days = [...Array(lastDay.getDate())].map((_, i) => getJPDate(year, month, i + 1))
 const space = '   '
-const firstWeekSpace = space.repeat(new Date(firstDay).getDay());
+const firstWeekSpace = space.repeat(new Date(firstDay).getDay())
 
-function getJPDate(year = 0, month = 0, day = 0) {
+function getJPDate (year = 0, month = 0, day = 0) {
   let date
-  if(year === 0 && month === 0 && day === 0){
+  if (year === 0 && month === 0 && day === 0) {
     date = new Date(new Date().getTime() + offsetTime)
-  }else{
+  } else {
     date = new Date(new Date(year, month, day).getTime() + offsetTime)
   }
   return date
