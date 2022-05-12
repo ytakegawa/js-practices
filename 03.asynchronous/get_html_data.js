@@ -1,6 +1,6 @@
-"use strict"
+'use strict'
 
-async function getHtmlData(url = '') {
+async function getHtmlData (url = '') {
   const response = await fetch(url, {
     method: 'GET'
   })
@@ -9,4 +9,4 @@ async function getHtmlData(url = '') {
 
 getHtmlData('https://bootcamp.fjord.jp/')
   .then(response => console.log(response))
-  .catch(error => console.log('error'))
+  // .catch(error => console.log('error'))
