@@ -9,4 +9,3 @@ async function getHtmlData (url = '') {
 
 getHtmlData('https://bootcamp.fjord.jp/')
   .then(response => console.log(response))
-  // .catch(error => console.log('error'))
