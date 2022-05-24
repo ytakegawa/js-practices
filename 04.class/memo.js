@@ -1,5 +1,30 @@
 const fs = require("fs")
 const enquirer = require('enquirer')
+const argv = require('minimist')(process.argv.slice(2))
+console.log(argv.l)
+
+
+
+class MemoAppExec{
+  constructor(d, l, r){
+    this.d = d //argv.d = delete data option
+    this.l = l //argv.l = show title option
+    this.r = r //arvg.r = show body option
+    this.memoFile = new MemoFile()
+  }
+  run(){
+    if
+  }
+
+  showTiltle(){
+    this.memoFile.showTiltle()
+  }
+}
+
+// function exec(showTitle = false, showBody =false, deleteData =false){
+//   console.log(showTitle, showBody, deleteData)
+
+// }
 
 class MemoFile {
   constructor(){
@@ -33,7 +58,7 @@ class MemoFile {
 
   showBody(deleteFlag = false){
     const memos = this.memoFile.memos
-    async function exec(memos, deleteFlag){
+    async function choiceMemo(memos, deleteFlag){
       const questions = {
         type: 'select',
         name: 'memo',
@@ -60,7 +85,7 @@ class MemoFile {
       })
       return choices
     }
-    exec(memos, deleteFlag)
+    choiceMemo(memos, deleteFlag)
   }
 
   static saveData(memoData){
@@ -130,8 +155,10 @@ class MemoData extends MemoFile{
 // console.log(memoData.genmemoFile())
 // console.log(MemoData.generateId())
 
-const newMemo = new MemoFile()
-newMemo.addData()
+// const newMemo = new MemoFile()
+// newMemo.addData()
 // const deleteFlag = true
 // newMemo.showBody(deleteFlag)
 // newMemo.showTiltle()
+
+exec(argv.l, argv.r, argv.d)
