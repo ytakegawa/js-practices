@@ -12,7 +12,7 @@ class MemoAppExec {
 
   main () {
     if (this.d) return this.memoFile.showBody(this.d)
-    if (this.l) return this.memoFile.showTiltle()
+    if (this.l) return this.memoFile.showTitle()
     if (this.r) return this.memoFile.showBody(this.d)
     this.memoFile.addData()
   }
@@ -30,7 +30,7 @@ class MemoFile {
     console.log('メモデータが追加されました')
   }
 
-  showTiltle () {
+  showTitle () {
     this.memoFile.memos.forEach(memo => {
       const splitBody = memo.body.split('\n')
       console.log(splitBody[0])
