@@ -3,18 +3,20 @@ const enquirer = require('enquirer')
 const argv = require('minimist')(process.argv.slice(2))
 
 class MemoAppExec {
-  constructor (d, l, r) {
-    this.d = d // argv.d = delete data option
-    this.l = l // argv.l = show title option
-    this.r = r // arvg.r = show body option
+  constructor () {
     this.memoFile = new MemoFile()
   }
 
-  main () {
-    if (this.d) return this.memoFile.showBody(this.d)
-    if (this.l) return this.memoFile.showTitle()
-    if (this.r) return this.memoFile.showBody(this.d)
-    this.memoFile.addData()
+  deleteData (deleteFlag) {
+    this.memoFile.showBody(deleteFlag)
+  }
+
+  showTitle () {
+    this.memoFile.showTitle()
+  }
+
+  showBody () {
+    this.memoFile.showBody()
   }
 }
 
@@ -90,5 +92,12 @@ class MemoData extends MemoFile {
 }
 
 // アプリの実行
-const memoApp = new MemoAppExec(argv.d, argv.l, argv.r)
-memoApp.main()
+const memoApp = new MemoAppExec()
+// memoApp.main()
+// const main = () => {
+if (argv.d) return memoApp.deleteData(argv.d)
+if (argv.l) return memoApp.showTitle()
+if (argv.r) return memoApp.showBody(argv.d)
+memoApp.memoFile.addData()
+// }
+
