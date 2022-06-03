@@ -1,55 +1,52 @@
 const fs = require('fs')
 const enquirer = require('enquirer')
+const { format } = require('path')
 const argv = require('minimist')(process.argv.slice(2))
 
 class MemoAppExec {
-  constructor () {
-    this.memoFile = new MemoFile()
-    this.memos = this.memoFile.memosData.memos
+  constructor (argv) {
+    this.argv = argv
   }
 
-  deleteData () {
-    this.memoFile.deleteData(this.memos)
-  }
-
-  showTitle () {
-    this.memoFile.showTitle()
-  }
-
-  showBody () {
-    this.memoFile.showBody(this.memos)
+  main () {
+    const memoFile = new MemoFile()
+    if (this.argv.d) return memoFile.deleteData()
+    if (this.argv.l) return memoFile.showTitle()
+    if (this.argv.r) return memoFile.showBody()
+    memoFile.addData()
   }
 }
 
 class MemoFile {
   constructor () {
-    this.memosData = JSON.parse(fs.readFileSync('./memo_file.json', 'utf8'))
+    this.memosFile = JSON.parse(fs.readFileSync('./memo_file.json', 'utf8'))
+    this.memos = this.memosFile.memos
   }
 
   addData () {
     const memo = new MemoData()
-    this.memosData.memos.push(memo.build_format())
-    MemoFile.saveData(this.memosData.memos)
+    this.memos.push(memo.build_format())
+    MemoFile.saveData(this.memos)
     console.log('メモデータが追加されました')
   }
 
   showTitle () {
-    this.memosData.memos.forEach(memo => {
+    this.memos.forEach(memo => {
       const splitBody = memo.body.split('\n')
       console.log(splitBody[0])
     })
   }
 
-  showBody (memos) {
-    MemoFile.choicesMemo(memos).then(result => {
-      const memo = memos.find(memo => memo.id === result.id)
+  showBody () {
+    MemoFile.choicesMemo(this.memos).then(result => {
+      const memo = this.memos.find(memo => memo.id === result.id)
       console.log(memo.body)
     })
   }
 
-  deleteData (memos) {
-    MemoFile.choicesMemo(memos).then(result => {
-      const newMemos = memos.filter(memo => memo.id !== result.id)
+  deleteData () {
+    MemoFile.choicesMemo(this.memos).then(result => {
+      const newMemos = this.memos.filter(memo => memo.id !== result.id)
       MemoFile.saveData(newMemos)
       console.log('メモの削除が完了しました')
     })
@@ -69,22 +66,20 @@ class MemoFile {
     }
 
     function choiceFormat (memos) {
-      const choices = []
-      memos.forEach(memo => {
-        const splitBody = memo.body.split('\n')
-        const choice = { message: splitBody[0], value: memo.id }
-        choices.push(choice)
-      })
-      return choices
+      const format =
+      memos.map((memo) => (
+        {message: memo.body.split('\n')[0], value: memo.id}
+      ))
+      return format
     }
     return choice(memos)
   }
 
 
-  static saveData (memoData) {
-    const formatData = { memos: memoData }
-    const newMemoFileJSON = JSON.stringify(formatData)
-    fs.writeFileSync('./memo_file.json', newMemoFileJSON)
+  static saveData (memos) {
+    const formatData = { memos: memos }
+    const newMemosJSONFile = JSON.stringify(formatData)
+    fs.writeFileSync('./memo_file.json', newMemosJSONFile)
   }
 }
 
@@ -95,17 +90,14 @@ class MemoData extends MemoFile {
   }
 
   build_format () {
-    const id = this.memosData.memos[0] ? (Math.max(...this.memosData.memos.map((memo) => memo.id))) + 1 : 1
+    const id = this.memos[0] ? (Math.max(...this.memos.map((memo) => memo.id))) + 1 : 1
     const dataFormat = { id: id.toString(), body: this.inputData.join('\n').toString() }
     return dataFormat
   }
 }
 
 // アプリの実行
-const memoApp = new MemoAppExec()
-if (argv.d) return memoApp.deleteData()
-if (argv.l) return memoApp.showTitle()
-if (argv.r) return memoApp.showBody()
-memoApp.memoFile.addData()
+const memoApp = new MemoAppExec(argv)
+memoApp.main()
 
 
