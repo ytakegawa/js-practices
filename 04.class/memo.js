@@ -1,6 +1,5 @@
 const fs = require('fs')
 const enquirer = require('enquirer')
-const { format } = require('path')
 const argv = require('minimist')(process.argv.slice(2))
 
 class MemoAppExec {
@@ -53,7 +52,7 @@ class MemoFile {
   }
 
   static choicesMemo (memos) {
-    async function choice(memos) {
+    async function choice (memos) {
       const questions = {
         type: 'select',
         name: 'memo',
@@ -68,16 +67,15 @@ class MemoFile {
     function choiceFormat (memos) {
       const format =
       memos.map((memo) => (
-        {message: memo.body.split('\n')[0], value: memo.id}
+        { message: memo.body.split('\n')[0], value: memo.id }
       ))
       return format
     }
     return choice(memos)
   }
 
-
   static saveData (memos) {
-    const formatData = { memos: memos }
+    const formatData = { memos }
     const newMemosJSONFile = JSON.stringify(formatData)
     fs.writeFileSync('./memo_file.json', newMemosJSONFile)
   }
@@ -99,5 +97,3 @@ class MemoData extends MemoFile {
 // アプリの実行
 const memoApp = new MemoAppExec(argv)
 memoApp.main()
-
-
